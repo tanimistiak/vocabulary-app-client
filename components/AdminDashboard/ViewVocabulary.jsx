@@ -1,20 +1,23 @@
 "use client";
 import api from "@/utils/api";
 import React, { useEffect, useState } from "react";
-
+import Modal from "./Modal";
 export default function ViewVocabulary() {
   const [lessons, setLessons] = useState([]);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [edit, setEdit] = useState();
+  const [editStatus, setEditStatus] = useState(false);
   useEffect(() => {
     api
       .get("/admin/get-vocabulary")
       .then((data) => setLessons(data.data.lesson))
       .catch((err) => console.log(err));
-  }, []);
+  }, [editStatus]);
   //   console.log(lessons);
   return (
     <>
-      <div class="relative overflow-x-scroll">
-        <table class="ml-[15%] w-[80%] text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
+      <div class="relative ml-[30%] overflow-x-scroll">
+        <table class=" w-[80%] text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
           <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" class="px-6 py-3">
@@ -40,16 +43,48 @@ export default function ViewVocabulary() {
                   class="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
                 >
                   {lesson?._doc?.lessonNumber}
+                  <span
+                    className="cursor-pointer font-bold"
+                    onClick={() => {
+                      setEdit({
+                        lessonNumber: lesson?._doc?.lessonNumber,
+                        _id: lesson?._doc?._id,
+                      });
+                      setModalOpen(true);
+                    }}
+                  >
+                    Edit
+                  </span>
                 </th>
                 <td class="px-6 py-4">
                   {lesson?._doc?.lessonName}{" "}
-                  <span className="cursor-pointer font-bold">Edit</span>
+                  <span
+                    className="cursor-pointer font-bold"
+                    onClick={() => {
+                      setEdit({
+                        lessonName: lesson?._doc?.lessonName,
+                        _id: lesson?._doc?._id,
+                      });
+                      setModalOpen(true);
+                    }}
+                  >
+                    Edit
+                  </span>
                 </td>
                 <td class="px-6 py-4">{lesson?.vocabularyLength}</td>
               </tr>
             ))}
           </tbody>
         </table>
+        <Modal
+          isOpen={isModalOpen}
+          edit={edit}
+          setEdit={setEdit}
+          setEditStatus={setEditStatus}
+          editStatus={editStatus}
+          onClose={() => setModalOpen(false)}
+          title="Modal Title"
+        ></Modal>
       </div>
     </>
   );
