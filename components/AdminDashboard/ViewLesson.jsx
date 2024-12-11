@@ -2,7 +2,7 @@
 import api from "@/utils/api";
 import React, { useEffect, useState } from "react";
 import Modal from "./Modal";
-export default function ViewVocabulary() {
+export default function ViewLesson() {
   const [lessons, setLessons] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [edit, setEdit] = useState();
@@ -17,14 +17,19 @@ export default function ViewVocabulary() {
   //   console.log(lessons);
   const handleDelete = async (id) => {
     // console.log(id);
-    await api
-      .post("/admin/delete-lesson", { _id: id })
-      .then((data) => {
-        if (data.data.status) {
-          setEditStatus(!editStatus);
-        }
-      })
-      .catch((err) => console.log(err));
+
+    if (confirm("Press a button!\nEither OK or Cancel.")) {
+      await api
+        .post("/admin/delete-lesson", { _id: id })
+        .then((data) => {
+          if (data.data.status) {
+            setEditStatus(!editStatus);
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+    console.log(res);
+    /* */
   };
   return (
     <>
