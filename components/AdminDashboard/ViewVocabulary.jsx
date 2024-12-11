@@ -7,6 +7,7 @@ export default function ViewVocabulary() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [edit, setEdit] = useState();
   const [editStatus, setEditStatus] = useState(false);
+  const [deleteLesson, setDeleteLesson] = useState();
   useEffect(() => {
     api
       .get("/admin/get-vocabulary")
@@ -14,6 +15,17 @@ export default function ViewVocabulary() {
       .catch((err) => console.log(err));
   }, [editStatus]);
   //   console.log(lessons);
+  const handleDelete = async (id) => {
+    // console.log(id);
+    await api
+      .post("/admin/delete-lesson", { _id: id })
+      .then((data) => {
+        if (data.data.status) {
+          setEditStatus(!editStatus);
+        }
+      })
+      .catch((err) => console.log(err));
+  };
   return (
     <>
       <div class="relative ml-[30%] overflow-x-scroll">
@@ -72,6 +84,16 @@ export default function ViewVocabulary() {
                   </span>
                 </td>
                 <td class="px-6 py-4">{lesson?.vocabularyLength}</td>
+                <td class="px-6 py-4">
+                  <span
+                    className="cursor-pointer font-bold"
+                    onClick={() => {
+                      handleDelete(lesson?._doc?._id);
+                    }}
+                  >
+                    Delete
+                  </span>
+                </td>
               </tr>
             ))}
           </tbody>
