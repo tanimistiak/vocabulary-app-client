@@ -1,6 +1,8 @@
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import Confetti from "react-confetti";
 export default function SingleLessonVocabulary({ lessons }) {
+  const router = useRouter();
   const width = window.innerWidth;
   const height = window.innerHeight;
   const [count, setCount] = useState(0);
@@ -74,7 +76,12 @@ export default function SingleLessonVocabulary({ lessons }) {
               Next
             </button>
           ) : (
-            <Confetti width={width} height={height} />
+            <Confetti
+              width={width}
+              height={height}
+              recycle={false}
+              onConfettiComplete={() => router.push("/user-dashboard/lesson")}
+            />
           )}
         </div>
       </div>
