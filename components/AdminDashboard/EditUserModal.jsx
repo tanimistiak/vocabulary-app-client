@@ -20,7 +20,7 @@ export default function EditUserModal({
       .put("/admin/update-user", edit)
       .then((data) => {
         if (data.data.status) {
-          console.log("hello");
+          //   console.log("hello");
           setEditStatus(!editStatus);
         }
       })
