@@ -1,9 +1,13 @@
 import React, { useState } from "react";
-
+import Confetti from "react-confetti";
 export default function SingleLessonVocabulary({ lessons }) {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
   const [count, setCount] = useState(0);
   const [lesson, setLesson] = useState(lessons[count]);
-  const [completeButton, setCompleteButton] = useState(false);
+  const [completeButton, setCompleteButton] = useState(
+    lessons.length > 1 ? false : true,
+  );
   console.log(lessons);
   const handlePrev = () => {
     setCompleteButton(false);
@@ -37,11 +41,11 @@ export default function SingleLessonVocabulary({ lessons }) {
     });
   };
   return (
-    <div
-      className="mx-auto max-w-md cursor-pointer space-y-4 rounded-lg bg-white p-6 shadow-md"
-      onClick={() => handlePronounce(lesson.word)}
-    >
-      <div className="word">
+    <div className="mx-auto max-w-md space-y-4 rounded-lg bg-white p-6 shadow-md">
+      <div
+        className="word cursor-pointer"
+        onClick={() => handlePronounce(lesson.word)}
+      >
         <p className="text-lg font-semibold text-gray-800">{lesson?.word}</p>
       </div>
       <div className="pronunciation">
@@ -70,9 +74,7 @@ export default function SingleLessonVocabulary({ lessons }) {
               Next
             </button>
           ) : (
-            <button className="rounded-lg bg-green-500 px-4 py-2 text-white shadow hover:bg-green-600">
-              Complete
-            </button>
+            <Confetti width={width} height={height} />
           )}
         </div>
       </div>
