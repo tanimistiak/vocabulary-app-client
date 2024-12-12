@@ -8,12 +8,14 @@ export default function ViewLesson() {
   const [edit, setEdit] = useState();
   const [editStatus, setEditStatus] = useState(false);
   const [id, setId] = useState();
+  const [lessonNum, setLessonNum] = useState();
+  const [resetFilter, setResetFilter] = useState(false);
   useEffect(() => {
     api
       .get("/admin/get-all-vocabulary")
       .then((data) => setVocabulary(data.data.vocabulary))
       .catch((err) => console.log(err));
-  }, [editStatus]);
+  }, [editStatus, resetFilter]);
   //   console.log(vocabulary);
   const handleDelete = async (id) => {
     // console.log(id);
@@ -31,9 +33,49 @@ export default function ViewLesson() {
     console.log(res);
     /* */
   };
+
+  const handleFilter = (e) => {
+    e.preventDefault();
+
+    const parsedLesson = parseInt(lessonNum);
+
+    if (parsedLesson && !NaN) {
+      const filteredVocabulary = vocabulary.filter(
+        (item) => item.lesson === parsedLesson,
+      );
+      setVocabulary(filteredVocabulary);
+    }
+  };
   return (
     <>
       <div class="relative ml-[30%] overflow-x-scroll">
+        <form onSubmit={handleFilter}>
+          <label
+            for="lesson"
+            class="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+          >
+            Filter by lesson
+          </label>
+          <input
+            name="lesson"
+            type="number"
+            id="lesson"
+            class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            onChange={(e) => setLessonNum(e.target.value)}
+          />
+          <button
+            type="submit"
+            class="my-5 w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
+          >
+            Submit
+          </button>
+          <button
+            class="mx-5 my-5 w-full rounded-lg bg-red-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
+            onClick={() => setResetFilter(!resetFilter)}
+          >
+            Reset filter
+          </button>
+        </form>
         <table class=" w-[80%] text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
           <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
             <tr>
