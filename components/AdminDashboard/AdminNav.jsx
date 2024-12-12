@@ -1,8 +1,21 @@
 "use client";
+import api from "@/utils/api";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 export default function AdminNav() {
+  const router = useRouter();
+  const handleLogout = () => {
+    api
+      .post("/logout")
+      .then((data) => {
+        if (data.data.status) {
+          router.push("/");
+        }
+      })
+      .catch((err) => console.log(err));
+  };
   return (
     <div>
       <button
@@ -150,8 +163,8 @@ export default function AdminNav() {
               </Link>
             </li>
             <li>
-              <a
-                href="#"
+              <button
+                onClick={() => handleLogout()}
                 class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
               >
                 <svg
@@ -165,12 +178,17 @@ export default function AdminNav() {
                   <path d="M6.737 11.061a2.961 2.961 0 0 1 .81-1.515l6.117-6.116A4.839 4.839 0 0 1 16 2.141V2a1.97 1.97 0 0 0-1.933-2H7v5a2 2 0 0 1-2 2H0v11a1.969 1.969 0 0 0 1.933 2h12.134A1.97 1.97 0 0 0 16 18v-3.093l-1.546 1.546c-.413.413-.94.695-1.513.81l-3.4.679a2.947 2.947 0 0 1-1.85-.227 2.96 2.96 0 0 1-1.635-3.257l.681-3.397Z" />
                   <path d="M8.961 16a.93.93 0 0 0 .189-.019l3.4-.679a.961.961 0 0 0 .49-.263l6.118-6.117a2.884 2.884 0 0 0-4.079-4.078l-6.117 6.117a.96.96 0 0 0-.263.491l-.679 3.4A.961.961 0 0 0 8.961 16Zm7.477-9.8a.958.958 0 0 1 .68-.281.961.961 0 0 1 .682 1.644l-.315.315-1.36-1.36.313-.318Zm-5.911 5.911 4.236-4.236 1.359 1.359-4.236 4.237-1.7.339.341-1.699Z" />
                 </svg>
-                <span class="ms-3 flex-1 whitespace-nowrap">Sign Up</span>
-              </a>
+                <span class="ms-3 flex-1 whitespace-nowrap">Sign Out</span>
+              </button>
             </li>
           </ul>
         </div>
       </aside>
+      <div class="p-4 sm:ml-64">
+        <div class="rounded-lg border-2 border-dashed border-gray-200 p-4 dark:border-gray-700">
+          <p>Admin Dashboard</p>
+        </div>
+      </div>
     </div>
   );
 }

@@ -33,8 +33,8 @@ export default function ViewLesson() {
   };
   return (
     <>
-      <div class="relative ml-[30%] overflow-x-scroll">
-        <table class=" w-[80%] text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
+      <div class="relative overflow-x-scroll">
+        <table class=" w-[100%] text-left text-sm text-gray-500 dark:text-gray-400 rtl:text-right">
           <thead class="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
             <tr>
               <th scope="col" class="px-6 py-3">
@@ -46,6 +46,9 @@ export default function ViewLesson() {
               </th>
               <th scope="col" class="px-6 py-3">
                 Vocabulary Count
+              </th>
+              <th scope="col" class="px-6 py-3">
+                Action
               </th>
             </tr>
           </thead>

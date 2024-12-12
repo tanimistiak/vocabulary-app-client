@@ -13,9 +13,13 @@ export default function layout({ children }) {
   return (
     <>
       {user?.role === "admin" ? (
-        <div className="flex justify-center">
+        <div>
           <AdminNav />
-          <div className="w-full">{children}</div>
+          <div class="p-4 sm:ml-64">
+            <div class="rounded-lg border-2 border-dashed border-gray-200 p-4 dark:border-gray-700">
+              {children}
+            </div>
+          </div>
         </div>
       ) : (
         <div>

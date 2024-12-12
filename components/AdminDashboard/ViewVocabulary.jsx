@@ -48,7 +48,7 @@ export default function ViewLesson() {
   };
   return (
     <>
-      <div class="relative ml-[30%] overflow-x-scroll">
+      <div class="relative overflow-x-scroll">
         <form onSubmit={handleFilter}>
           <label
             for="lesson"

@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import LoadingSpinner from "../components/LoadingSpinner";
 import auth from "../firebase.config";
 import api from "@/utils/api";
 import { useUser } from "@/contexts/userContext";
@@ -10,6 +11,7 @@ import axios from "axios";
 export default function LoginForm({ setIsRegister }) {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState();
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -21,6 +23,8 @@ export default function LoginForm({ setIsRegister }) {
     // console.log("hello");
 
     try {
+      setError("");
+      setLoading(true);
       const userCredential = await signInWithEmailAndPassword(
         auth,
         formData.email,
@@ -31,6 +35,7 @@ export default function LoginForm({ setIsRegister }) {
       const res = await api.post("/login", { idToken });
 
       setUser({ email: formData.email, role: res.data.role });
+      setLoading(false);
       if (res.data.role === "user") {
         router.push("/user-dashboard");
       }
@@ -38,8 +43,8 @@ export default function LoginForm({ setIsRegister }) {
         router.push("/admin-dashboard");
       }
     } catch (error) {
-      setError("Login failed");
-      console.log(error);
+      setLoading(false);
+      setError(error?.message);
     }
   };
   useEffect(() => {
@@ -103,12 +108,17 @@ export default function LoginForm({ setIsRegister }) {
             </button>
           </label>
         </div>
-        <button
-          type="submit"
-          class="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
-        >
-          Submit
-        </button>
+        {error ? <p className="text-red-600">{error}</p> : ""}
+        {!loading ? (
+          <button
+            type="submit"
+            class="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
+          >
+            Submit
+          </button>
+        ) : (
+          <LoadingSpinner />
+        )}
       </form>
     </div>
   );
