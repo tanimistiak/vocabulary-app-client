@@ -50,7 +50,11 @@ export default function Lessons() {
                     <td className="px-6 py-4">{lesson?.lessonNumber}</td>
                     <td className="px-6 py-4">{lesson?.lessonName}</td>
                     <td>
-                      <Link href="/user-dashboard/lesson">Learn Lesson</Link>
+                      <Link
+                        href={`/user-dashboard/lesson/${lesson?.lessonNumber}`}
+                      >
+                        Learn Lesson
+                      </Link>
                     </td>
                   </tr>
                 ))}
