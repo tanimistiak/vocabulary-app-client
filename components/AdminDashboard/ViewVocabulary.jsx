@@ -22,7 +22,7 @@ export default function ViewLesson() {
 
     if (confirm("Press a button!\nEither OK or Cancel.")) {
       await api
-        .post("/admin/delete-lesson", { _id: id })
+        .post("/admin/delete-vocabulary", { _id: id })
         .then((data) => {
           if (data.data.status) {
             setEditStatus(!editStatus);

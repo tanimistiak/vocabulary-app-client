@@ -127,8 +127,8 @@ export default function AdminNav() {
               </Link>
             </li>
             <li>
-              <a
-                href="#"
+              <Link
+                href="/admin-dashboard/users"
                 class="group flex items-center rounded-lg p-2 text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
               >
                 <svg
@@ -146,8 +146,8 @@ export default function AdminNav() {
                     d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"
                   />
                 </svg>
-                <span class="ms-3 flex-1 whitespace-nowrap">Sign In</span>
-              </a>
+                <span class="ms-3 flex-1 whitespace-nowrap">View Users</span>
+              </Link>
             </li>
             <li>
               <a
