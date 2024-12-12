@@ -1,7 +1,9 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 "use client";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import api from "@/utils/api";
 import React, { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function page() {
   const [formData, setFormData] = useState({
@@ -11,15 +13,20 @@ export default function page() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const lessonNum = parseInt(formData.lessonNumber);
     setFormData({ ...formData, lessonNumber: lessonNum });
     // console.log({ ...formData, lessonNumber: lessonNum });
+    setLoading(true);
     await api
       .post("/admin/add-lesson", formData)
-      .then((data) => console.log(data.data))
-      .catch((err) => console.log(err));
+      .then((data) => {
+        toast(data.data.message);
+      })
+      .catch((err) => toast(err.message))
+      .finally(() => setLoading(false));
   };
   // console.log(formData);
   return (
@@ -60,13 +67,18 @@ export default function page() {
             onChange={handleChange}
           />
         </div>
-        <button
-          type="submit"
-          class="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
-        >
-          Submit
-        </button>
+        {!loading ? (
+          <button
+            type="submit"
+            class="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
+          >
+            Submit
+          </button>
+        ) : (
+          <LoadingSpinner />
+        )}
       </form>
+      <ToastContainer />
     </div>
   );
 }
