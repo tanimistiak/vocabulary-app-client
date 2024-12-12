@@ -10,7 +10,7 @@ export default function SingleLessonVocabulary({ lessons }) {
   const [completeButton, setCompleteButton] = useState(
     lessons.length > 1 ? false : true,
   );
-  console.log(lessons);
+  const [completeStatus, setCompleteStatus] = useState(false);
   const handlePrev = () => {
     setCompleteButton(false);
     setCount((prev) => {
@@ -76,15 +76,23 @@ export default function SingleLessonVocabulary({ lessons }) {
               Next
             </button>
           ) : (
-            <Confetti
-              width={width}
-              height={height}
-              recycle={false}
-              onConfettiComplete={() => router.push("/user-dashboard/lesson")}
-            />
+            <button
+              className="rounded-lg bg-green-500 px-4 py-2 text-white shadow hover:bg-green-600"
+              onClick={() => setCompleteStatus(true)}
+            >
+              Complete
+            </button>
           )}
         </div>
       </div>
+      {completeStatus && (
+        <Confetti
+          width={width}
+          height={height}
+          recycle={false}
+          onConfettiComplete={() => router.push("/user-dashboard/lesson")}
+        />
+      )}
     </div>
   );
 }
