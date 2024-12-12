@@ -1,5 +1,7 @@
 import api from "@/utils/api";
 import React, { useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import LoadingSpinner from "../LoadingSpinner";
 
 export default function Modal({
   isOpen,
@@ -13,17 +15,21 @@ export default function Modal({
   const handleChange = (e) => {
     setEdit({ ...edit, [e.target.name]: e.target.value });
   };
+  const [loading, setLoading] = useState(false);
   //   console.log(edit);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     await api
       .put("/admin/update-lesson", edit)
       .then((data) => {
         if (data.data.status) {
           setEditStatus(!editStatus);
         }
+        toast(data.data.message);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
   };
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -60,17 +66,20 @@ export default function Modal({
                 required
                 onChange={handleChange}
               />
-              <button
-                type="submit"
-                class="my-5 w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
-              >
-                Submit
-              </button>
+              {!loading ? (
+                <button
+                  type="submit"
+                  class="my-5 w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
+                >
+                  Submit
+                </button>
+              ) : (
+                <LoadingSpinner />
+              )}
             </form>
           </div>
         </div>
 
-        {/* Modal Footer */}
         <div className="flex justify-end border-t px-4 py-2">
           <button
             onClick={onClose}
@@ -80,6 +89,7 @@ export default function Modal({
           </button>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

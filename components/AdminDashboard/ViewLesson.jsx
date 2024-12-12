@@ -8,6 +8,7 @@ export default function ViewLesson() {
   const [edit, setEdit] = useState();
   const [editStatus, setEditStatus] = useState(false);
   const [deleteLesson, setDeleteLesson] = useState();
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     api
       .get("/admin/get-vocabulary")
