@@ -11,12 +11,13 @@ export default function EditUserModal({
   setEditStatus,
   editStatus,
 }) {
+  const [loading, setLoading] = useState(false);
   if (!isOpen) return null;
   const handleChange = (e) => {
     setEdit({ ...edit, [e.target.name]: e.target.value });
   };
   //   console.log(edit);
-  const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);

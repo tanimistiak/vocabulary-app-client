@@ -11,11 +11,12 @@ export default function Modal({
   setEditStatus,
   editStatus,
 }) {
+  const [loading, setLoading] = useState(false);
   if (!isOpen) return null;
   const handleChange = (e) => {
     setEdit({ ...edit, [e.target.name]: e.target.value });
   };
-  const [loading, setLoading] = useState(false);
+
   //   console.log(edit);
   const handleSubmit = async (e) => {
     e.preventDefault();
