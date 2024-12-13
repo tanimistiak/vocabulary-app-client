@@ -2,7 +2,10 @@
 import React, { useState } from "react";
 import api from "../utils/api";
 import axios from "axios";
+import LoadingSpinner from "./LoadingSpinner";
+import { toast, ToastContainer } from "react-toastify";
 export default function RegisterForm({ setIsRegister }) {
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState();
   const [formData, setFormData] = useState({
     name: "",
@@ -16,6 +19,8 @@ export default function RegisterForm({ setIsRegister }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage("");
+    setLoading(true);
     const form = new FormData(e.target);
     const image = form.get("image");
     const data = new FormData();
@@ -32,13 +37,18 @@ export default function RegisterForm({ setIsRegister }) {
             ...formData,
             photoURL: res.data.data.display_url,
           });
+          // console.log(response);
           setMessage(response.data.message);
+          toast(response.data.message);
           setIsRegister(true);
         } catch (error) {
-          setMessage("Registration failed");
+          // console.log(error);
+          setMessage(error.response.data.message);
+          toast(error.response.data.message);
         }
       })
-      .catch((err) => console.log(err.data));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
     /*  */
   };
   // console.log(message);
@@ -109,6 +119,7 @@ export default function RegisterForm({ setIsRegister }) {
             id="user_avatar"
             type="file"
             name="image"
+            required
           />
           <div
             class="mt-1 text-sm text-gray-500 dark:text-gray-300"
@@ -135,15 +146,19 @@ export default function RegisterForm({ setIsRegister }) {
             </label>
           </div>
         </div>
-
-        <button
-          type="submit"
-          class="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
-        >
-          Submit
-        </button>
         {message && <p className="text-green-500">{message}</p>}
+        {!loading ? (
+          <button
+            type="submit"
+            class="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
+          >
+            Submit
+          </button>
+        ) : (
+          <LoadingSpinner />
+        )}
       </form>
+      <ToastContainer />
     </div>
   );
 }

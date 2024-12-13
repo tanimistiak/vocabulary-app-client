@@ -37,7 +37,7 @@ export default function LoginForm({ setIsRegister }) {
       setUser({ email: formData.email, role: res.data.role });
       setLoading(false);
       if (res.data.role === "user") {
-        router.push("/user-dashboard");
+        router.push("/user-dashboard/lesson");
       }
       if (res.data.role === "admin") {
         router.push("/admin-dashboard");
@@ -52,7 +52,7 @@ export default function LoginForm({ setIsRegister }) {
       if (data.data.role === "admin") {
         router.push("/admin-dashboard");
       } else if (data.data.role === "user") {
-        router.push("/user-dashboard");
+        router.push("/user-dashboard/lesson");
       } else {
         router.push("/");
       }
