@@ -2,6 +2,7 @@
 import api from "@/utils/api";
 import React, { useEffect, useState } from "react";
 import Modal from "./Modal";
+import LoadingSpinner from "../LoadingSpinner";
 export default function ViewLesson() {
   const [lessons, setLessons] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -18,7 +19,7 @@ export default function ViewLesson() {
   //   console.log(lessons);
   const handleDelete = async (id) => {
     // console.log(id);
-
+    setLoading(true);
     if (confirm("Press a button!\nEither OK or Cancel.")) {
       await api
         .post("/admin/delete-lesson", { _id: id })
@@ -27,7 +28,8 @@ export default function ViewLesson() {
             setEditStatus(!editStatus);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.log(err))
+        .finally(() => setLoading(false));
     }
     console.log(res);
     /* */
@@ -94,14 +96,18 @@ export default function ViewLesson() {
                 </td>
                 <td class="px-6 py-4">{lesson?.vocabularyLength}</td>
                 <td class="px-6 py-4">
-                  <span
-                    className="cursor-pointer font-bold"
-                    onClick={() => {
-                      handleDelete(lesson?._doc?._id);
-                    }}
-                  >
-                    Delete
-                  </span>
+                  {!loading ? (
+                    <span
+                      className="cursor-pointer font-bold"
+                      onClick={() => {
+                        handleDelete(lesson?._doc?._id);
+                      }}
+                    >
+                      Delete
+                    </span>
+                  ) : (
+                    <LoadingSpinner />
+                  )}
                 </td>
               </tr>
             ))}

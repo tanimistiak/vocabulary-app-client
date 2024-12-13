@@ -1,5 +1,7 @@
 import api from "@/utils/api";
 import React, { useState } from "react";
+import LoadingSpinner from "../LoadingSpinner";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function EditVocabularyModal({
   isOpen,
@@ -14,17 +16,21 @@ export default function EditVocabularyModal({
   const handleChange = (e) => {
     setEdit({ ...edit, [e.target.name]: e.target.value });
   };
-  console.log(edit);
+  // console.log(edit);
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     await api
       .put("/admin/update-vocabulary", { edit, id })
       .then((data) => {
         if (data.data.status) {
           setEditStatus(!editStatus);
+          toast(data.data.message);
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => toast.error(err.message))
+      .finally(() => setLoading(false));
   };
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -117,12 +123,16 @@ export default function EditVocabularyModal({
                   onChange={handleChange}
                 />
               </div>
-              <button
-                type="submit"
-                class="my-5 w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
-              >
-                Update
-              </button>
+              {!loading ? (
+                <button
+                  type="submit"
+                  class="my-5 w-full rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 sm:w-auto"
+                >
+                  Update
+                </button>
+              ) : (
+                <LoadingSpinner />
+              )}
             </form>
           </div>
         </div>
@@ -137,6 +147,7 @@ export default function EditVocabularyModal({
           </button>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }
